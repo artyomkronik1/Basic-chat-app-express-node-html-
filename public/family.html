@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>family Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <style>
+        form {
+            padding: 30px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding-right: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Chat Room - for family</h1>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <ul id="messages"></ul>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <form id="message-form" action="">
+                    <div class="input-group">
+
+                        <input id="m" class="form-control" placeholder=" Message...." aria-label="Message..." type="text">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit">Send!</button>
+                        </span>
+
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+
+
+
+
+
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+        const room = 'family';
+        const socket = io.connect('/tech');
+
+        $('form').submit(() => {
+            let msg = $('#m').val();
+            socket.emit('message', {
+                msg,
+                room
+            });
+            $('#m').val('');
+            return false;
+        });
+
+
+        socket.on('connect', () => {
+            socket.emit('join', {
+                room: room
+            });
+        });
+
+
+        socket.on('message', (msg) => {
+            $('#messages').append($('<li>').text(msg));
+        });
+    </script>
+
+
+</body>
+
+</html>
